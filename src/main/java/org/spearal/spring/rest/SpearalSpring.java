@@ -24,8 +24,7 @@ import org.springframework.http.MediaType;
  * 
  * @author William DRAI
  */
-public class Spearal {
+public class SpearalSpring {
 	
-	public final static String APPLICATION_SPEARAL = "application/spearal";
 	public final static MediaType APPLICATION_SPEARAL_TYPE = new MediaType("application", "spearal");
 }

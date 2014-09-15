@@ -45,16 +45,16 @@ public class SpearalMessageConverter implements HttpMessageConverter<Object> {
 	}
 	
 	public boolean canWrite(Class<?> type, MediaType mediaType) {
-		return mediaType == null || Spearal.APPLICATION_SPEARAL_TYPE.equals(mediaType);
+		return mediaType == null || SpearalSpring.APPLICATION_SPEARAL_TYPE.equals(mediaType);
 	}
 	
 	public boolean canRead(Class<?> type, MediaType mediaType) {
-		return mediaType == null || Spearal.APPLICATION_SPEARAL_TYPE.equals(mediaType);
+		return mediaType == null || SpearalSpring.APPLICATION_SPEARAL_TYPE.equals(mediaType);
 	}
 	
 	public void write(Object obj, MediaType contentType, HttpOutputMessage outputMessage) throws IOException, HttpMessageNotWritableException {
 		
-		outputMessage.getHeaders().setContentType(Spearal.APPLICATION_SPEARAL_TYPE);
+		outputMessage.getHeaders().setContentType(SpearalSpring.APPLICATION_SPEARAL_TYPE);
 		
 		SpearalEncoder encoder = factory.newEncoder(outputMessage.getBody());
 		
@@ -74,7 +74,7 @@ public class SpearalMessageConverter implements HttpMessageConverter<Object> {
 	}
 	
 	public List<MediaType> getSupportedMediaTypes() {
-		return Collections.singletonList(Spearal.APPLICATION_SPEARAL_TYPE);
+		return Collections.singletonList(SpearalSpring.APPLICATION_SPEARAL_TYPE);
 	}
 
 }
