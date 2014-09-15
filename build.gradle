@@ -1,0 +1,75 @@
+/**
+ * == @Spearal ==>
+ * 
+ * Copyright (C) 2014 Franck WOLFF & William DRAI (http://www.spearal.io)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.spearal'
+version =  spearalVersion
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+compileJava {
+    sourceCompatibility=1.6
+    targetCompatibility=1.6
+}
+
+jar {
+    baseName = 'spearal-spring'
+    version = spearalVersion
+}
+
+dependencies {
+    
+    compile 'org.javassist:javassist:3.18.2-GA'
+    compile 'org.springframework:spring-webmvc:4.1.0.RELEASE'	
+    compile 'org.springframework:spring-orm:4.1.0.RELEASE'	
+	compile 'org.jboss.spec.javax.servlet:jboss-servlet-api_3.1_spec:1.0.0.Final'
+    compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+	compile "org.spearal:spearal-java:${spearalVersion}"
+	compile "org.spearal:spearal-jpa2:${spearalVersion}"
+	
+    testCompile 'junit:junit:4.11'
+    
+    testRuntime 'com.h2database:h2:1.4.179'
+}
+
+install {
+	repositories {
+		mavenInstaller {
+			// Generated dependencies are not suitable for maven pom, remove everything for now
+			pom.whenConfigured { pom -> pom.dependencies.clear() }
+		}
+	}
+}
+
+task sourcesJar(type: Jar, dependsOn: 'classes') {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives sourcesJar
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.12'
+}
