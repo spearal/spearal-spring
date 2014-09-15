@@ -17,12 +17,11 @@
  */
 package org.spearal.spring.rest.xml;
 
-import org.spearal.spring.rest.SpearalConfigurator;
 import org.spearal.spring.rest.SpearalMessageConverter;
 import org.spearal.spring.rest.SpearalResponseBodyAdvice;
+import org.spearal.spring.rest.SpearalRestConfigurator;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
-import org.springframework.beans.factory.parsing.CompositeComponentDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
@@ -33,25 +32,25 @@ public class SpearalRestBeanDefinitionParser extends AbstractSingleBeanDefinitio
 	
     @Override
     protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
-        CompositeComponentDefinition componentDefinition = new CompositeComponentDefinition(element.getLocalName(), parserContext.extractSource(element));
-        parserContext.pushContainingComponent(componentDefinition);
-
-        element.setAttribute(ID_ATTRIBUTE, SpearalConfigurator.class.getName());
+    	if ("".equals(element.getAttribute(ID_ATTRIBUTE)))
+    		element.setAttribute(ID_ATTRIBUTE, SpearalRestConfigurator.class.getName());
         
-        BeanDefinitionBuilder messageConverterBuilder = BeanDefinitionBuilder.genericBeanDefinition(SpearalMessageConverter.class);
-        messageConverterBuilder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
-        registerInfrastructureComponent(element, parserContext, messageConverterBuilder, SpearalMessageConverter.class.getName());
+    	if (!parserContext.getRegistry().containsBeanDefinition(SpearalMessageConverter.class.getName())) {
+	        BeanDefinitionBuilder messageConverterBuilder = BeanDefinitionBuilder.genericBeanDefinition(SpearalMessageConverter.class);
+	        messageConverterBuilder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+	        registerInfrastructureComponent(element, parserContext, messageConverterBuilder, SpearalMessageConverter.class.getName());
+    	}
         
-        BeanDefinitionBuilder responseBodyAdviceBuilder = BeanDefinitionBuilder.genericBeanDefinition(SpearalResponseBodyAdvice.class);
-        responseBodyAdviceBuilder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
-        registerInfrastructureComponent(element, parserContext, responseBodyAdviceBuilder, SpearalResponseBodyAdvice.class.getName());
-        
-        parserContext.popAndRegisterContainingComponent();
+    	if (!parserContext.getRegistry().containsBeanDefinition(SpearalResponseBodyAdvice.class.getName())) {
+	        BeanDefinitionBuilder responseBodyAdviceBuilder = BeanDefinitionBuilder.genericBeanDefinition(SpearalResponseBodyAdvice.class);
+	        responseBodyAdviceBuilder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+	        registerInfrastructureComponent(element, parserContext, responseBodyAdviceBuilder, SpearalResponseBodyAdvice.class.getName());
+    	}
     }
     
     @Override
     protected String getBeanClassName(Element element) {
-        return SpearalConfigurator.class.getName();
+        return SpearalRestConfigurator.class.getName();
     }
 
     

@@ -18,8 +18,6 @@
 package org.spearal.spring.jpa.xml;
 
 import org.spearal.spring.jpa.SpearalJpaConfigurator;
-import org.spearal.spring.rest.SpearalConfigurator;
-import org.springframework.beans.factory.parsing.CompositeComponentDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
@@ -29,12 +27,8 @@ public class SpearalJpaBeanDefinitionParser extends AbstractSingleBeanDefinition
 	
     @Override
     protected void doParse(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
-        CompositeComponentDefinition componentDefinition = new CompositeComponentDefinition(element.getLocalName(), parserContext.extractSource(element));
-        parserContext.pushContainingComponent(componentDefinition);
-
-        element.setAttribute(ID_ATTRIBUTE, SpearalConfigurator.class.getName());
-        
-        parserContext.popAndRegisterContainingComponent();
+    	if ("".equals(element.getAttribute(ID_ATTRIBUTE)))
+    		element.setAttribute(ID_ATTRIBUTE, SpearalJpaConfigurator.class.getName());
     }
     
     @Override

@@ -18,7 +18,7 @@
 package org.spearal.spring.rest.config;
 
 import org.spearal.SpearalFactory;
-import org.spearal.spring.rest.SpearalConfigurator;
+import org.spearal.spring.rest.SpearalRestConfigurator;
 import org.spearal.spring.rest.SpearalMessageConverter;
 import org.spearal.spring.rest.SpearalResponseBodyAdvice;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class SpearalRestConfig {
 	}
 	
 	@Bean
-	public SpearalConfigurator spearalConfigurator() {
-		return new SpearalConfigurator();
+	public SpearalRestConfigurator spearalConfigurator() {
+		return new SpearalRestConfigurator();
 	}
 }

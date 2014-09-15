@@ -30,15 +30,15 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * 
  * @author William DRAI
  */
-public class SpearalConfigurator implements BeanPostProcessor, ApplicationContextAware {
+public class SpearalRestConfigurator implements BeanPostProcessor, ApplicationContextAware {
 	
 	private ApplicationContext applicationContext = null;
 	private SpearalFactory spearalFactory = null;
 	
-	public SpearalConfigurator() {		
+	public SpearalRestConfigurator() {		
 	}
 	
-	public SpearalConfigurator(SpearalFactory spearalFactory) {
+	public SpearalRestConfigurator(SpearalFactory spearalFactory) {
 		this.spearalFactory = spearalFactory;
 	}
 	
@@ -48,8 +48,6 @@ public class SpearalConfigurator implements BeanPostProcessor, ApplicationContex
 	
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
-		if (this.spearalFactory == null)
-			this.spearalFactory = applicationContext.getBean(SpearalFactory.class);
 	}
 	
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
@@ -57,8 +55,12 @@ public class SpearalConfigurator implements BeanPostProcessor, ApplicationContex
 	}
 	
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		if (bean instanceof Configurable && spearalFactory != null)
+		if (bean instanceof Configurable) {
+			if (this.spearalFactory == null)
+				this.spearalFactory = applicationContext.getBean(SpearalFactory.class);
+			
 			spearalFactory.getContext().configure((Configurable)bean);
+		}
 		
 		if (bean instanceof RequestMappingHandlerAdapter && applicationContext != null) {
 			SpearalMessageConverter messageConverter = applicationContext.getBean(SpearalMessageConverter.class);
