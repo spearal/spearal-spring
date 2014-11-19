@@ -79,7 +79,7 @@ To configure the Spring MVC integration (REST message converter, etc.):
 NOTE: You have to declare one single bean of type `SpearalFactory` that contains the Spearal configuration.
 
 If you want to actually change something in the default configuration, you can use a factory bean to create 
-the `SpearalFactory`and call `spearalFactory.configure(new SomeOption());`.
+the `SpearalFactory` and call `spearalFactory.configure(new SomeOption());`.
 
 The JPA integration (EntityManager proxying, etc.) can be configured with:
 
@@ -101,8 +101,8 @@ The JPA integration (EntityManager proxying, etc.) can be configured with:
 
 ==== Java Config
 
-To configure the Spring MVC integration (REST message converter, etc.), combine the annotation
-`@EnableSpearalRest` with `@EnableWebMvc`:
+To configure the Spring MVC integration (REST message converter, etc.), use the annotation
+`@EnableSpearalRest` in a `@Configuration` class:
 
 [source,java]
 ----
@@ -121,7 +121,7 @@ public class PersonWebConfig extends WebMvcConfigurerAdapter {
 }
 ----
 
-Note that we declare the `SpearalFactory` that we could do additional setup here.
+Note that we declare the `SpearalFactory` here and that we could do additional setup.
 
 To configure the JPA integration, use `@EnableSpearalJpa`:
 
