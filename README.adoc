@@ -42,6 +42,11 @@ the dependency on the library in your build system:
 ----
 <dependency>
 	<groupId>org.spearal</groupId>
+	<artifactId>spearal-java</artifactId>
+	<version>0.2.0</version>
+</dependency>
+<dependency>
+	<groupId>org.spearal</groupId>
 	<artifactId>spearal-spring</artifactId>
 	<version>0.2.0</version>
 </dependency>
@@ -50,6 +55,7 @@ the dependency on the library in your build system:
 [source,java]
 .Gradle
 ----
+compile 'org.spearal:spearal-java:0.2.0'
 compile 'org.spearal:spearal-spring:0.2.0'
 ----
 
@@ -171,17 +177,17 @@ It's recommended to build the `SpearalFactory` inside a singleton and reuse it e
 ----
 public class SpearalFactoryHolder {
 	
-	private static SpearalFactory spearalFactory = null;
+    private static SpearalFactory spearalFactory = null;
 	
-	public static SpearalFactory getInstance() {
-		if (spearalFactory != null)
-			return spearalFactory;
+    public static SpearalFactory getInstance() {
+        if (spearalFactory != null)
+            return spearalFactory;
 		
-		spearalFactory = new DefaultSpearalFactory();
-		spearalFactory.getContext().configure(new PackageTranslatorAliasStrategy(
-			"org.spearal.examples.android", "org.spearal.examples.server.spring"));
-		return spearalFactory;
-	}
+        spearalFactory = new DefaultSpearalFactory();
+        spearalFactory.getContext().configure(new PackageTranslatorAliasStrategy(
+            "org.spearal.examples.android", "org.spearal.examples.server.spring"));
+        return spearalFactory;
+    }
 }
 ----
 
