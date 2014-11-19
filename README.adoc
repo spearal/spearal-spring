@@ -1,0 +1,151 @@
+= Spearal Spring
+
+== What is Spearal?
+
+Spearal is a compact binary format for exchanging arbitrary complex data between various endpoints such as Java EE, JavaScript / HTML, Android and iOS applications.
+
+Spearal-Spring is an extension of Spearal-Java which implements the necessary integration classes to use Spearal in Spring MVC REST client and server applications.
+
+== How to get and build the project?
+
+First, you need to get, build and install Spearal-Java:
+
+[source,bash]
+----
+$ git clone https://github.com/spearal/spearal-java.git
+$ cd spearal-java
+$ ./gradlew install
+----
+
+Then, you can build Spearal Spring:
+
+[source,bash]
+----
+$ cd ..
+$ git clone https://github.com/spearal/spearal-spring.git
+$ cd spearal-spring
+$ ./gradlew build
+----
+
+The library can then be found in the `build/libs` directory.
+
+
+== How to use the library?
+
+=== Server-side
+
+The library is available in the Maven central repository, so with Maven or Gradle you simply have to reference 
+the dependency on the library in your build system:
+
+[source,xml]
+.Maven
+----
+<dependency>
+	<groupId>org.spearal</groupId>
+	<artifactId>spearal-spring</artifactId>
+	<version>0.2.0</version>
+</dependency>
+----
+
+[source,java]
+.Gradle
+----
+compile 'org.spearal:spearal-spring:0.2.0'
+----
+
+Spearal-Spring can then be configured with Spring XML Config or Java Config.
+
+==== XML Config
+
+To configure the Spring MVC integration (REST message converter, etc.):
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:spearal="http://www.spearal.io/config"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://spearal.io/config
+        http://spearal.io/public/spring/1.0/spearal-config-1.0.xsd">
+        
+   	<bean id="spearalFactory" class="org.spearal.DefaultSpearalFactory"/>
+    
+    <spearal:rest/>
+</beans>
+----
+
+NOTE: You have to declare one single bean of type `SpearalFactory` that contains the Spearal configuration.
+
+If you want to actually change something in the default configuration, you can use a factory bean to create 
+the `SpearalFactory`and call `spearalFactory.configure(new SomeOption());`.
+
+The JPA integration (EntityManager proxying, etc.) can be configured with:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:spearal="http://www.spearal.io/config"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://spearal.io/config
+        http://spearal.io/public/spring/1.0/spearal-config-1.0.xsd">
+    
+    <spearal:jpa/>
+</beans>
+----
+
+
+==== Java Config
+
+To configure the Spring MVC integration (REST message converter, etc.), combine the annotation
+`@EnableSpearalRest` with `@EnableWebMvc`:
+
+[source,java]
+----
+@Configuration
+@EnableWebMvc
+@EnableSpearalRest
+public class PersonWebConfig extends WebMvcConfigurerAdapter {
+	
+	@Bean
+	public SpearalFactory spearalFactory() {
+		return new DefaultSpearalFactory();
+	}
+	
+	...
+	// Configure resources
+}
+----
+
+Note that we declare the `SpearalFactory` that we could do additional setup here.
+
+To configure the JPA integration, use `@EnableSpearalJpa`:
+
+[source,java]
+----
+@Configuration
+@EnableTransactionManagement
+@EnableSpearalJpa
+public class PersonJpaConfig {
+	
+    @Bean
+    public DataSource dataSource() {
+        ...
+    }
+    
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+    	...
+    }
+    
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+    	...
+    }
+}
+----
+
