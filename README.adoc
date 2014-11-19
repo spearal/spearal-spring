@@ -143,7 +143,7 @@ public class PersonJpaConfig {
     }
     
     @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
     	...
     }
 }
@@ -165,7 +165,7 @@ restTemplate.getMessageConverters().add(new SpearalMessageConverter(spearalFacto
 
 Of course in most cases you will use more than one `RestTemplate` so you will have to share the same `SpearalFactory`
 accross the whole application.
-It's recommended to build the `SpearalFactory` inside a singleton and reuse it everywhere in the app :
+It's recommended to build the `SpearalFactory` inside a singleton and reuse it everywhere in the app:
 
 [source,java]
 ----
@@ -178,18 +178,21 @@ public class SpearalFactoryHolder {
 			return spearalFactory;
 		
 		spearalFactory = new DefaultSpearalFactory();
-		spearalFactory.getContext().configure(new PackageTranslatorAliasStrategy("org.spearal.examples.android", "org.spearal.examples.server.spring"));
+		spearalFactory.getContext().configure(new PackageTranslatorAliasStrategy(
+			"org.spearal.examples.android", "org.spearal.examples.server.spring"));
 		return spearalFactory;
 	}
 }
 ----
 
-And:
+Here we also configure a specific class alias strategy in the factory. Then use the factory from anywhere:
 
 [source,java]
 ----
 RestTemplate restTemplate = new RestTemplate();
-restTemplate.getMessageConverters().add(new SpearalMessageConverter(SpearalFactoryHolder.getInstance()));
+restTemplate.getMessageConverters().add(
+	new SpearalMessageConverter(SpearalFactoryHolder.getInstance())
+);
 ----
 
 ==== Using property filters
@@ -198,10 +201,13 @@ You can set property filters manually with http headers, but it's a lot more con
 
 [source,java]
 ----
-SpearalPropertyFilterBuilder filter = SpearalPropertyFilterBuilder.of(Person.class, "name", "description")
+SpearalPropertyFilterBuilder filter = 
+	SpearalPropertyFilterBuilder.of(Person.class, "name", "description")
         
-SpearalEntity<Object> filterEntity = new SpearalEntity<Params>(SpearalFactoryHolder.getInstance(), null, null, filter);
-ResponseEntity<Object> responseEntity = restTemplate.exchange(url, HttpMethod.GET, filterEntity, resultClass, params);
+SpearalEntity<Object> filterEntity = new SpearalEntity<Params>(
+	SpearalFactoryHolder.getInstance(), null, null, filter);
+ResponseEntity<Object> responseEntity = 
+	restTemplate.exchange(url, HttpMethod.GET, filterEntity, resultClass, params);
 Object result = responseEntity.getBody();
 ----
 
@@ -212,4 +218,3 @@ care of applicable class and property aliases.
 The first argument (client filter) will be applied during serialization of the client object to the server. The second Object (server filter)
 will be applied during serialization of the server result from the server to the client. This second one is converted as a String and passed
 to the server as HTTP header. It is then transmitted from the request to the response handler by a Spring `ResponseBodyAdvice`.
- 
