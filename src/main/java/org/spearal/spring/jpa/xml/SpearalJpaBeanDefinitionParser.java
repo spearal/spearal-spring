@@ -23,6 +23,9 @@ import org.springframework.beans.factory.xml.AbstractSingleBeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
 
+/**
+ * @author William DRAI
+ */
 public class SpearalJpaBeanDefinitionParser extends AbstractSingleBeanDefinitionParser {
 	
     @Override

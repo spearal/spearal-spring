@@ -21,6 +21,9 @@ import org.spearal.spring.jpa.xml.SpearalJpaBeanDefinitionParser;
 import org.spearal.spring.rest.xml.SpearalRestBeanDefinitionParser;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
+/**
+ * @author William DRAI
+ */
 public class SpearalNamespaceHandler extends NamespaceHandlerSupport {
 	
 	public void init() {
