@@ -6,29 +6,6 @@ Spearal is a compact binary format for exchanging arbitrary complex data between
 
 Spearal-Spring is an extension of Spearal-Java which implements the necessary integration classes to use Spearal in Spring MVC REST client and server applications.
 
-== How to get and build the project?
-
-First, you need to get, build and install Spearal-Java:
-
-[source,bash]
-----
-$ git clone https://github.com/spearal/spearal-java.git
-$ cd spearal-java
-$ ./gradlew install
-----
-
-Then, you can build Spearal Spring:
-
-[source,bash]
-----
-$ cd ..
-$ git clone https://github.com/spearal/spearal-spring.git
-$ cd spearal-spring
-$ ./gradlew build
-----
-
-The library can then be found in the `build/libs` directory.
-
 
 == How to use the library?
 
@@ -43,21 +20,24 @@ the dependency on the library in your build system:
 <dependency>
 	<groupId>org.spearal</groupId>
 	<artifactId>spearal-java</artifactId>
-	<version>0.2.0</version>
+	<version>${spearal.version}</version>
 </dependency>
 <dependency>
 	<groupId>org.spearal</groupId>
 	<artifactId>spearal-spring</artifactId>
-	<version>0.2.0</version>
+	<version>${spearal.version}</version>
 </dependency>
 ----
 
 [source,java]
 .Gradle
 ----
-compile 'org.spearal:spearal-java:0.2.0'
-compile 'org.spearal:spearal-spring:0.2.0'
+compile 'org.spearal:spearal-java:${spearalVersion}'
+compile 'org.spearal:spearal-spring:${spearalVersion}'
 ----
+
+In any other case, just download the https://github.com/spearal/spearal-java/releases[Spearal-Java] and https://github.com/spearal/spearal-spring/releases[Spearal-Spring] jars from github and add them to your classpath.
+
 
 Spearal-Spring can then be configured with Spring XML Config or Java Config.
 
@@ -224,3 +204,27 @@ care of applicable class and property aliases.
 The first argument (client filter) will be applied during serialization of the client object to the server. The second Object (server filter)
 will be applied during serialization of the server result from the server to the client. This second one is converted as a String and passed
 to the server as HTTP header. It is then transmitted from the request to the response handler by a Spring `ResponseBodyAdvice`.
+
+
+== How to get and build the project?
+
+First, you need to get, build and install Spearal-Java:
+
+[source,bash]
+----
+$ git clone https://github.com/spearal/spearal-java.git
+$ cd spearal-java
+$ ./gradlew install
+----
+
+Then, you can build Spearal Spring:
+
+[source,bash]
+----
+$ cd ..
+$ git clone https://github.com/spearal/spearal-spring.git
+$ cd spearal-spring
+$ ./gradlew build
+----
+
+The library can then be found in the `build/libs` directory.
